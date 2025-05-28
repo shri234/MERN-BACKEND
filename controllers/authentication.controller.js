@@ -34,12 +34,14 @@ async function login(req, res) {
         if (!identifier || !password) {
             return res.status(400).json({ message: 'Identifier and password are required.' });
         }
+
         console.log(identifier,password)
+        const isNumeric = /^\d+$/.test(identifier.trim());
+        const query = isNumeric
+    ? { mobileNumber: parseInt(identifier.trim(), 10) } // Convert to integer for numeric input
+    : { username: identifier.trim() };
         const findUser = await User.findOne({
-            $or: [
-                { username: identifier.trim() },
-                { mobileNumber: identifier.trim() },
-            ],
+            $or: [query],
         });
 
         console.log(findUser)
