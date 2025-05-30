@@ -3,12 +3,12 @@ const bcrypt = require('bcrypt');
 const Joi = require('joi');
 
 const UserSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-    },
+    // username: {
+    //     type: String,
+    //     required: true,
+    //     unique: true,
+    //     trim: true,
+    // },
     email: {
         type: String,
         required: true,
@@ -24,11 +24,11 @@ const UserSchema = new mongoose.Schema({
     mobileNumber: {
         type: String,
         required: true,
+        unique:true,
         match: [/^\d{10}$/, 'Invalid mobile number'],
     },
     designation: {
         type: String,
-        required: true,
         trim: true,
     },
     role: {
@@ -61,6 +61,7 @@ UserSchema.pre('save', async function (next) {
     } catch (err) {
         next(err);
     }
+
 });
 
 UserSchema.methods.comparePassword = async function (candidatePassword) {
@@ -69,9 +70,9 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
 
 // Joi Validation Schema
 const joiUserSchema = Joi.object({
-    username: Joi.string().alphanum().min(3).max(30).required(),
+    // username: Joi.string().alphanum().min(3).max(30).required(),
     email: Joi.string().email().required(),
-    password: Joi.string().min(6).required(),
+    password: Joi.string().min(8).required(),
     mobileNumber: Joi.string().pattern(/^\d{10}$/).required().messages({
         'string.pattern.base': 'Mobile number must be a 10-digit number',
     }),
